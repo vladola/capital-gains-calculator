@@ -10,3 +10,5 @@ __pycache__
 env
 dist
 out/
+data/
+translation/
