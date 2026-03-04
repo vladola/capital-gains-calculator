@@ -42,6 +42,7 @@ DIVIDEND_ALLOWANCES: Final[dict[int, int]] = {
     2022: 2000,
     2023: 1000,
     2024: 500,
+    2025: 500,
 }
 
 
@@ -74,6 +75,7 @@ ERI_TAX_DATE_DELTA: Final = relativedelta(months=6)
 
 TICKER_RENAMES: Final[dict[str, str]] = {
     "FB": "META",
+    "IEGE": "IBGE",
 }
 
 

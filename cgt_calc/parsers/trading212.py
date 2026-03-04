@@ -126,6 +126,9 @@ def action_from_str(label: str, file: Path) -> ActionType:
     if label == "Stock Split":
         return ActionType.STOCK_SPLIT
 
+    if label == "Stock distribution":
+        return ActionType.TRANSFER
+
     if label in [
         "Currency conversion",
         "Result adjustment",
@@ -272,6 +275,17 @@ class Trading212Transaction(BrokerTransaction):
                     "Discrepancy per Share: %.3f.",
                     float(discrepancy),
                 )
+
+        # A sell with zero price and zero total is a ticker migration, not a real
+        # disposal.  Treat it as a transfer so the CGT engine ignores it.
+        if (
+            action == ActionType.SELL
+            and amount is not None
+            and amount == 0
+            and self.price_foreign is not None
+            and self.price_foreign == 0
+        ):
+            action = ActionType.TRANSFER
 
         isin = row[Trading212Column.ISIN]
         self.transaction_id = row.get(Trading212Column.TRANSACTION_ID)
